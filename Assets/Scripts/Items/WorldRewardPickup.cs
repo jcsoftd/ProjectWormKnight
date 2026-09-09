@@ -42,6 +42,7 @@ namespace TeamProject01.Gameplay
 
         [Header("Collect")]
         [Min(0.05f)] public float CollectDistance = 0.55f;
+        public bool SubmitRewardOnCollect = true;
 
         private int enemyId;
         private bool collected;
@@ -295,6 +296,13 @@ namespace TeamProject01.Gameplay
             }
 
             RewardData reward = ResolveRewardData(); // 픽업 종류별 보상
+
+            if (!SubmitRewardOnCollect)
+            {
+                DamageFloatingSpawner.SpawnRewardGain(Kind, Amount, ResolveRewardFloatingFallbackPosition());
+                CompleteCollect();
+                return;
+            }
 
             if (!RewardGateway.SubmitReward(reward))
             {
